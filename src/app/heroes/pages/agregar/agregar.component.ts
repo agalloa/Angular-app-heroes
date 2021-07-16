@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-agregar',
-  templateUrl: './agregar.component.html',
-  styleUrls: ['./agregar.component.css']
+  templateUrl: './agregar.component.html'
 })
 export class AgregarComponent implements OnInit {
 
