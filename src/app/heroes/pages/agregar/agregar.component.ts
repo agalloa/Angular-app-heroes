@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
+import { ConfirmarComponent } from '../../components/confirmar/confirmar.component';
 import { Heroe, Publisher } from '../../interfaces/heroes.interface';
 import { HeroesService } from '../../services/heroes.service';
 
@@ -39,7 +42,9 @@ export class AgregarComponent implements OnInit {
   }
   constructor(  private heroesService: HeroesService,
                 private activatedRoute: ActivatedRoute,
-                private router: Router) { }
+                private router: Router,
+                private snackBar: MatSnackBar,
+                private dialog: MatDialog) { }
 
   ngOnInit(): void {
 
@@ -59,21 +64,39 @@ export class AgregarComponent implements OnInit {
    }
 
    if( this.heroe.id ){
-     //TODO actualizar
+    //ACTUALIZAR
     this.heroesService.actualizarHeroe( this.heroe )
-    .subscribe( heroe => console.log('Actualizando', heroe))
+    .subscribe( heroe => this.mostrarSnakbar('Registro actualizado!!'));
    }else{
-    //TODO crear
+    //CREAR
     this.heroesService.agregarHeroe( this.heroe )
     .subscribe( heroe => {
       this.router.navigate(['/heroes/editar', heroe.id]);
+      this.mostrarSnakbar('Registro Creado!!')
     });
    }
   }
 
   eliminar(){
-    this.heroesService.borrarHeroe( this.heroe.id! ).subscribe( resp => {
-      this.router.navigate(['/heroes']);
-    })
+    const dialog = this.dialog.open(ConfirmarComponent,{
+      width:'300px',
+      data: this.heroe
+    });
+
+    dialog.afterClosed().subscribe(
+      (result) => {
+        if( result ){
+          this.heroesService.borrarHeroe( this.heroe.id! ).subscribe( resp => {
+          this.router.navigate(['/heroes']);
+          });
+        }
+      }
+    )
+  }
+
+  mostrarSnakbar( mensaje: string ){
+    this.snackBar.open( mensaje, 'Cerrar', {
+       duration:7000
+    });
   }
 }
