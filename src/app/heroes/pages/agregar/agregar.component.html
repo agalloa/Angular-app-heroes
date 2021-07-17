@@ -1,4 +1,4 @@
-<h1>Nuevo heroe <small>asdf</small></h1>
+<h1> {{ ( heroe.id ) ? 'Editar' : 'Nuevo' }} heroe <small>{{ heroe.superhero }}</small></h1>
 
 <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="40px">
   <div fxFlex="50" fxLayout="column">
@@ -35,7 +35,7 @@
     <div fxLayout>
       <button mat-raised-button color="primary" (click)="guardar()">
         <mat-icon>save</mat-icon>
-        Guardar
+        {{ ( heroe.id ) ? 'Actualizar' : 'Crear' }}
       </button>
       <span class="spacer"></span>
       <button *ngIf="heroe.id"  mat-raised-button color="warn" (click)="eliminar()">
