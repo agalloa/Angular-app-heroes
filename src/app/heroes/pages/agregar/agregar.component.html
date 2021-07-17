@@ -31,12 +31,18 @@
       <mat-label>Foto url</mat-label>
       <input type="url" [(ngModel)] = "heroe.alt_img" matInput required>
     </mat-form-field>
-
     <br>
-    <button mat-raised-button color="primary" (click)="guardar()">
-      <mat-icon>save</mat-icon>
-      Guardar
-    </button>
+    <div fxLayout>
+      <button mat-raised-button color="primary" (click)="guardar()">
+        <mat-icon>save</mat-icon>
+        Guardar
+      </button>
+      <span class="spacer"></span>
+      <button *ngIf="heroe.id"  mat-raised-button color="warn" (click)="eliminar()">
+        <mat-icon>delete</mat-icon>
+        Eliminar
+      </button>
+    </div>
   </div>
   <div fxFlex="50">
     <img [src]="heroe | imagen" alt="" srcset="">

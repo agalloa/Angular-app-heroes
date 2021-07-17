@@ -6,7 +6,15 @@ import { HeroesService } from '../../services/heroes.service';
 
 @Component({
   selector: 'app-agregar',
-  templateUrl: './agregar.component.html'
+  templateUrl: './agregar.component.html',
+  styles:[
+    `
+      img{
+        width: 100%;
+        border-radius: 5px;
+      }
+    `
+  ]
 })
 export class AgregarComponent implements OnInit {
 
@@ -35,11 +43,14 @@ export class AgregarComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.activatedRoute.params
+    if( !this.router.url.includes('editar') ){
+        return;
+    }
+     this.activatedRoute.params
     .pipe(
       switchMap( ({id}) =>this.heroesService.getHeroeXId(id) )
-    )
-    .subscribe( heroe => this.heroe = heroe );
+     )
+     .subscribe( heroe => this.heroe = heroe );
   }
 
   guardar(){
@@ -58,5 +69,11 @@ export class AgregarComponent implements OnInit {
       this.router.navigate(['/heroes/editar', heroe.id]);
     });
    }
+  }
+
+  eliminar(){
+    this.heroesService.borrarHeroe( this.heroe.id! ).subscribe( resp => {
+      this.router.navigate(['/heroes']);
+    })
   }
 }
